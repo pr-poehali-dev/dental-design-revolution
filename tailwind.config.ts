@@ -18,7 +18,17 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'fredoka': ['Fredoka', 'sans-serif'],
+				'space': ['Space Grotesk', 'sans-serif'],
+				'caveat': ['Caveat', 'cursive'],
+			},
 			colors: {
+				'neon-pink': '#FF10F0',
+				'electric-blue': '#00D4FF',
+				'cyber-green': '#39FF14',
+				'deep-purple': '#6A0DAD',
+				'warm-orange': '#FF6B35',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

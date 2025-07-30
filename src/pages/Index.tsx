@@ -1,612 +1,352 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
 export default function Index() {
-  const [activeSection, setActiveSection] = useState('home');
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const services = [
     { 
-      title: "Терапевтическая стоматология", 
-      price: "от 3,500₽", 
-      description: "Лечение кариеса, пульпита, периодонтита без боли",
-      icon: "Heart"
+      title: "Терапия", 
+      price: "3,500₽", 
+      description: "Безболезненное лечение кариеса",
+      icon: "Heart",
+      color: "from-pink-500 to-blue-500"
     },
     { 
-      title: "Хирургическая стоматология", 
-      price: "от 8,000₽", 
-      description: "Удаление зубов, имплантация с комфортом",
-      icon: "Scissors"
+      title: "Хирургия", 
+      price: "8,000₽", 
+      description: "Комфортные операции",
+      icon: "Scissors",
+      color: "from-blue-500 to-green-500"
     },
     { 
       title: "Ортопедия", 
-      price: "от 15,000₽", 
-      description: "Протезирование и восстановление зубов",
-      icon: "Wrench"
+      price: "15,000₽", 
+      description: "Протезирование премиум",
+      icon: "Wrench",
+      color: "from-green-500 to-orange-500"
     },
     { 
       title: "Ортодонтия", 
-      price: "от 25,000₽", 
-      description: "Исправление прикуса брекетами и элайнерами",
-      icon: "Smile"
+      price: "25,000₽", 
+      description: "Невидимые брекеты",
+      icon: "Smile",
+      color: "from-orange-500 to-purple-500"
     },
     { 
       title: "Пародонтология", 
-      price: "от 4,500₽", 
-      description: "Лечение десен современными методами",
-      icon: "Leaf"
+      price: "4,500₽", 
+      description: "Лазерное лечение десен",
+      icon: "Leaf",
+      color: "from-purple-500 to-pink-500"
     },
     { 
-      title: "Детская стоматология", 
-      price: "от 2,000₽", 
-      description: "Особый подход к маленьким пациентам",
-      icon: "Baby"
+      title: "Детская", 
+      price: "2,000₽", 
+      description: "Игровой подход",
+      icon: "Baby",
+      color: "from-blue-500 to-orange-500"
     }
   ];
 
   const doctors = [
     { 
       name: "Анна Петрова", 
-      specialty: "Главный врач, терапевт", 
-      experience: "15 лет опыта",
-      description: "Специализируется на безболезненном лечении"
+      specialty: "Главный врач", 
+      experience: "15 лет",
+      emoji: "👩‍⚕️"
     },
     { 
       name: "Михаил Сидоров", 
       specialty: "Хирург-имплантолог", 
-      experience: "12 лет опыта",
-      description: "Эксперт по имплантации и сложным операциям"
+      experience: "12 лет",
+      emoji: "👨‍⚕️"
     },
     { 
       name: "Елена Кузнецова", 
       specialty: "Ортодонт", 
-      experience: "10 лет опыта",
-      description: "Специалист по исправлению прикуса"
-    }
-  ];
-
-  const technologies = [
-    { name: "3D-сканирование", description: "Точная диагностика без слепков" },
-    { name: "Лазерное лечение", description: "Безболезненное лечение десен" },
-    { name: "Цифровая рентгенография", description: "Минимальная лучевая нагрузка" },
-    { name: "Седация закисью азота", description: "Полное расслабление во время процедур" }
-  ];
-
-  const reviews = [
-    { 
-      name: "Мария К.", 
-      rating: 5, 
-      text: "Впервые лечила зубы без страха! Врачи очень внимательные, все объясняют." 
-    },
-    { 
-      name: "Андрей Л.", 
-      rating: 5, 
-      text: "Поставил имплант, даже не почувствовал боли. Отличная клиника!" 
-    },
-    { 
-      name: "Светлана Р.", 
-      rating: 5, 
-      text: "Привела сюда ребенка - он не плакал! Врачи нашли подход." 
-    }
-  ];
-
-  const promotions = [
-    { 
-      title: "Первичная консультация", 
-      oldPrice: "2,000₽", 
-      newPrice: "БЕСПЛАТНО", 
-      validity: "до 31 декабря" 
-    },
-    { 
-      title: "Комплексная гигиена", 
-      oldPrice: "8,000₽", 
-      newPrice: "5,500₽", 
-      validity: "весь месяц" 
-    },
-    { 
-      title: "Имплантация под ключ", 
-      oldPrice: "80,000₽", 
-      newPrice: "65,000₽", 
-      validity: "ограниченное предложение" 
+      experience: "10 лет",
+      emoji: "🦷"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Круговая навигация */}
-      <nav className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/90 backdrop-blur-md rounded-full px-8 py-4 shadow-xl border border-blue-100">
-          <div className="flex items-center space-x-6">
-            {[
-              { id: 'home', label: 'Главная', icon: 'Home' },
-              { id: 'services', label: 'Услуги', icon: 'Stethoscope' },
-              { id: 'doctors', label: 'Врачи', icon: 'Users' },
-              { id: 'prices', label: 'Цены', icon: 'Receipt' },
-              { id: 'promo', label: 'Акции', icon: 'Percent' },
-              { id: 'tech', label: 'Технологии', icon: 'Cpu' },
-              { id: 'reviews', label: 'Отзывы', icon: 'MessageCircle' },
-              { id: 'contacts', label: 'Контакты', icon: 'MapPin' }
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                  activeSection === item.id 
-                    ? 'bg-blue-600 text-white shadow-lg scale-105' 
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                }`}
-              >
-                <Icon name={item.icon} size={16} />
-                <span className="text-sm font-medium">{item.label}</span>
-              </button>
-            ))}
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Floating cursor effect */}
+      <div 
+        className="fixed w-96 h-96 bg-gradient-to-r from-pink-500/20 to-blue-500/20 rounded-full blur-3xl pointer-events-none z-0 transition-all duration-1000"
+        style={{
+          left: mousePosition.x - 192,
+          top: mousePosition.y - 192,
+        }}
+      />
+
+      {/* Diagonal Navigation */}
+      <nav className="fixed top-0 right-0 z-50 transform rotate-45 origin-top-right">
+        <div className="bg-gradient-to-r from-pink-500 to-blue-500 p-8 shadow-2xl">
+          <div className="transform -rotate-45 flex space-x-6">
+            <button className="text-white hover:text-black transition-colors font-space font-bold">
+              ГЛАВНАЯ
+            </button>
+            <button className="text-white hover:text-black transition-colors font-space font-bold">
+              УСЛУГИ
+            </button>
+            <button className="text-white hover:text-black transition-colors font-space font-bold">
+              ВРАЧИ
+            </button>
+            <button className="text-white hover:text-black transition-colors font-space font-bold">
+              КОНТАКТЫ
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      {activeSection === 'home' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-8 animate-fade-in">
-                <div className="space-y-4">
-                  <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                    <Icon name="Sparkles" size={14} className="mr-1" />
-                    Лечение без боли и стресса
-                  </Badge>
-                  <h1 className="text-6xl font-bold text-gray-800 leading-tight">
-                    Современная
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600 block">
-                      Стоматология
-                    </span>
-                  </h1>
-                  <p className="text-xl text-gray-600 leading-relaxed">
-                    Комфортное лечение зубов с использованием передовых технологий. 
-                    Мы заботимся о вашем здоровье и спокойствии.
-                  </p>
-                </div>
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                    <Icon name="Calendar" size={20} className="mr-2" />
-                    Записаться на прием
-                  </Button>
-                  <Button size="lg" variant="outline" className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-6 text-lg rounded-2xl">
-                    <Icon name="Phone" size={20} className="mr-2" />
-                    +7 (495) 123-45-67
-                  </Button>
-                </div>
+      {/* Hero Section with Asymmetric Layout */}
+      <section className="min-h-screen flex items-center relative overflow-hidden">
+        {/* Background geometric shapes */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-1/4 w-72 h-72 bg-gradient-to-r from-green-500/30 to-blue-500/30 transform rotate-12 rounded-3xl blur-xl"></div>
+          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-gradient-to-r from-pink-500/20 to-purple-500/20 transform -rotate-12 rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-10 w-48 h-48 bg-gradient-to-r from-orange-500/40 to-green-500/40 transform rotate-45 blur-lg"></div>
+        </div>
 
-                <div className="grid grid-cols-3 gap-8 pt-8">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">15+</div>
-                    <div className="text-gray-600">лет опыта</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">5000+</div>
-                    <div className="text-gray-600">пациентов</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-purple-600">99%</div>
-                    <div className="text-gray-600">довольных клиентов</div>
-                  </div>
-                </div>
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-12 gap-8 items-center">
+            {/* Text Content - Asymmetric positioning */}
+            <div className="lg:col-span-7 lg:col-start-2 space-y-8">
+              <div className="space-y-4">
+                <Badge className="bg-gradient-to-r from-pink-500 to-blue-500 text-black font-bold text-lg px-6 py-2 transform -rotate-2">
+                  <Icon name="Sparkles" size={16} className="mr-2" />
+                  БЕЗ БОЛИ & СТРЕССА
+                </Badge>
+                
+                <h1 className="font-fredoka text-8xl font-bold leading-none">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-green-500">
+                    ЗУБЫ
+                  </span>
+                  <br />
+                  <span className="font-caveat text-6xl text-orange-500 transform rotate-3 inline-block">
+                    будущего
+                  </span>
+                </h1>
+                
+                <p className="font-space text-2xl text-gray-300 max-w-2xl leading-relaxed">
+                  Революционная стоматология с технологиями завтрашнего дня. 
+                  Лечим зубы как в <span className="text-blue-500 font-bold">2050 году</span>.
+                </p>
               </div>
               
-              <div className="relative animate-scale-in">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-green-400 rounded-3xl transform rotate-3 opacity-20"></div>
-                <img 
-                  src="/img/f4ec8e21-b7b7-49d7-a869-d1b33eb2bc20.jpg" 
-                  alt="Современная стоматологическая клиника" 
-                  className="relative rounded-3xl shadow-2xl w-full h-96 object-cover"
-                />
-                <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-6 shadow-xl">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                      <Icon name="Shield" size={24} className="text-green-600" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-800">Безопасно</div>
-                      <div className="text-gray-600 text-sm">Стерильность 100%</div>
-                    </div>
+              <div className="flex flex-col sm:flex-row gap-6">
+                <Button size="lg" className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-blue-500 hover:to-pink-500 text-black font-bold text-xl px-10 py-8 rounded-full transform hover:scale-105 transition-all duration-300 shadow-2xl">
+                  <Icon name="Zap" size={24} className="mr-3" />
+                  ЗАПИСАТЬСЯ СЕЙЧАС
+                </Button>
+                <Button size="lg" variant="outline" className="border-4 border-green-500 text-green-500 hover:bg-green-500 hover:text-black font-bold text-xl px-10 py-8 rounded-full transform hover:rotate-3 transition-all duration-300">
+                  <Icon name="Phone" size={24} className="mr-3" />
+                  +7 (495) FUTURE
+                </Button>
+              </div>
+
+              {/* Stats with Creative Layout */}
+              <div className="grid grid-cols-3 gap-8 pt-12">
+                <div className="text-center transform rotate-3 bg-gradient-to-r from-pink-500/20 to-blue-500/20 p-6 rounded-3xl backdrop-blur-sm">
+                  <div className="text-5xl font-fredoka font-bold text-blue-500">15+</div>
+                  <div className="font-space text-gray-300">лет в космосе</div>
+                </div>
+                <div className="text-center transform -rotate-2 bg-gradient-to-r from-green-500/20 to-orange-500/20 p-6 rounded-3xl backdrop-blur-sm">
+                  <div className="text-5xl font-fredoka font-bold text-green-500">5000+</div>
+                  <div className="font-space text-gray-300">счастливых улыбок</div>
+                </div>
+                <div className="text-center transform rotate-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 rounded-3xl backdrop-blur-sm">
+                  <div className="text-5xl font-fredoka font-bold text-pink-500">99%</div>
+                  <div className="font-space text-gray-300">довольных пациентов</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Element - Floating 3D-style elements */}
+            <div className="lg:col-span-4 relative">
+              <div className="relative w-full h-96">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-pink-500/30 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-green-500 to-blue-500 rounded-3xl transform rotate-12 shadow-2xl flex items-center justify-center">
+                  <Icon name="Smile" size={48} className="text-white" />
+                </div>
+                <div className="absolute bottom-20 right-8 w-24 h-24 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full transform -rotate-12 shadow-2xl flex items-center justify-center">
+                  <Icon name="Sparkles" size={32} className="text-white" />
+                </div>
+                <div className="absolute top-1/3 right-1/4 w-40 h-40 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl transform rotate-45 shadow-2xl flex items-center justify-center">
+                  <div className="transform -rotate-45">
+                    <Icon name="Zap" size={56} className="text-white" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* Services Section */}
-      {activeSection === 'services' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-gray-800 mb-6">Наши Услуги</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Полный спектр стоматологических услуг с применением современных технологий
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <Card key={index} className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg bg-white/80 backdrop-blur-sm animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
+      {/* Services Section with Diagonal Grid */}
+      <section className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-green-500/10"></div>
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="font-fredoka text-7xl font-bold mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500">
+                УСЛУГИ
+              </span>
+            </h2>
+            <p className="font-space text-2xl text-gray-300 max-w-4xl mx-auto">
+              Технологии, которых еще нет в других клиниках
+            </p>
+          </div>
+          
+          {/* Diagonal services grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 transform rotate-2">
+            {services.map((service, index) => (
+              <Card key={index} className={`group bg-gradient-to-r ${service.color} p-1 rounded-3xl transform ${index % 2 === 0 ? 'rotate-3' : '-rotate-3'} hover:rotate-0 transition-all duration-500 hover:scale-110 shadow-2xl`}>
+                <div className="bg-black rounded-3xl p-8 h-full">
                   <CardHeader className="pb-4">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <Icon name={service.icon} size={28} className="text-white" />
+                    <div className={`w-20 h-20 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-180 transition-transform duration-500`}>
+                      <Icon name={service.icon} size={32} className="text-black" />
                     </div>
-                    <CardTitle className="text-xl text-gray-800 group-hover:text-blue-600 transition-colors">
+                    <CardTitle className="font-fredoka text-2xl text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-blue-500 transition-all">
                       {service.title}
                     </CardTitle>
-                    <CardDescription className="text-gray-600">
+                    <CardDescription className="font-space text-gray-300">
                       {service.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-blue-600">{service.price}</span>
-                      <Button variant="outline" size="sm" className="group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        Подробнее
+                      <span className="font-fredoka text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">
+                        {service.price}
+                      </span>
+                      <Button variant="outline" size="sm" className="border-2 border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-black font-bold">
+                        GO!
                       </Button>
                     </div>
                   </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Doctors Section */}
-      {activeSection === 'doctors' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-gray-800 mb-6">Наши Врачи</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Команда профессионалов с многолетним опытом и современным подходом
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {doctors.map((doctor, index) => (
-                <Card key={index} className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg bg-white/80 backdrop-blur-sm animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
-                  <CardHeader className="text-center">
-                    <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <Icon name="User" size={36} className="text-white" />
-                    </div>
-                    <CardTitle className="text-xl text-gray-800">{doctor.name}</CardTitle>
-                    <CardDescription className="text-blue-600 font-medium">{doctor.specialty}</CardDescription>
-                    <Badge variant="secondary" className="mx-auto w-fit">{doctor.experience}</Badge>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 text-center">{doctor.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            <div className="relative animate-scale-in">
-              <img 
-                src="/img/815a25a8-09ab-4695-9408-b7fc62aed7ab.jpg" 
-                alt="Команда врачей" 
-                className="rounded-3xl shadow-2xl w-full h-64 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-3xl flex items-end">
-                <div className="p-8 text-white">
-                  <h3 className="text-2xl font-bold mb-2">Профессиональная команда</h3>
-                  <p className="text-white/90">Каждый врач регулярно повышает квалификацию</p>
                 </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Doctors Section with Creative Layout */}
+      <section className="py-32 relative">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-pink-500/10 transform -skew-y-2"></div>
+          <div className="absolute bottom-0 right-0 w-full h-32 bg-gradient-to-t from-transparent to-blue-500/10 transform skew-y-2"></div>
+        </div>
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="font-caveat text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-green-500 transform -rotate-2 inline-block">
+              Космическая команда
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-12">
+            {doctors.map((doctor, index) => (
+              <div key={index} className={`transform ${index === 1 ? 'scale-110 -rotate-2' : index === 0 ? 'rotate-3' : '-rotate-1'} hover:scale-125 hover:rotate-0 transition-all duration-500`}>
+                <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border-2 border-blue-500/50 rounded-3xl overflow-hidden shadow-2xl">
+                  <CardHeader className="text-center pb-4">
+                    <div className="text-8xl mb-4 transform hover:scale-125 transition-transform duration-300">
+                      {doctor.emoji}
+                    </div>
+                    <CardTitle className="font-fredoka text-2xl text-white">{doctor.name}</CardTitle>
+                    <CardDescription className="font-space text-blue-500 font-bold text-lg">{doctor.specialty}</CardDescription>
+                    <Badge className="bg-gradient-to-r from-green-500 to-orange-500 text-black font-bold mx-auto w-fit">
+                      {doctor.experience}
+                    </Badge>
+                  </CardHeader>
+                </Card>
               </div>
-            </div>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* Prices Section */}
-      {activeSection === 'prices' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-gray-800 mb-6">Прозрачные Цены</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Честная стоимость услуг без скрытых платежей
-              </p>
-            </div>
+      {/* Contact Section with Futuristic Design */}
+      <section className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-transparent to-pink-500/20"></div>
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="font-fredoka text-7xl font-bold mb-8">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-green-500">
+                ГОТОВ К БУДУЩЕМУ?
+              </span>
+            </h2>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <Card key={index} className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg bg-white/80 backdrop-blur-sm animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-xl flex items-center justify-center">
-                        <Icon name={service.icon} size={20} className="text-white" />
-                      </div>
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        Популярно
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg text-gray-800">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="text-3xl font-bold text-blue-600">{service.price}</div>
-                      <p className="text-gray-600 text-sm">{service.description}</p>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                        Записаться
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Promotions Section */}
-      {activeSection === 'promo' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-gray-800 mb-6">Специальные Предложения</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Выгодные акции и скидки для новых и постоянных пациентов
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {promotions.map((promo, index) => (
-                <Card key={index} className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg bg-gradient-to-br from-red-50 to-orange-50 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge className="bg-red-500 text-white hover:bg-red-500">
-                        <Icon name="Percent" size={14} className="mr-1" />
-                        АКЦИЯ
-                      </Badge>
-                      <div className="text-sm text-gray-600">{promo.validity}</div>
-                    </div>
-                    <CardTitle className="text-xl text-gray-800">{promo.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="text-lg text-gray-500 line-through">{promo.oldPrice}</div>
-                      <div className="text-3xl font-bold text-red-500">{promo.newPrice}</div>
-                    </div>
-                    <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
-                      Воспользоваться
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Technologies Section */}
-      {activeSection === 'tech' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-8 animate-fade-in">
-                <div>
-                  <h2 className="text-5xl font-bold text-gray-800 mb-6">Современные Технологии</h2>
-                  <p className="text-xl text-gray-600">
-                    Используем передовое оборудование для точной диагностики и комфортного лечения
-                  </p>
-                </div>
-                
+            <div className="grid md:grid-cols-2 gap-12 mt-16">
+              <Card className="bg-gradient-to-r from-blue-500/20 to-green-500/20 backdrop-blur-sm border-2 border-blue-500/50 rounded-3xl p-8 transform rotate-2 hover:-rotate-1 transition-all duration-300">
                 <div className="space-y-6">
-                  {technologies.map((tech, index) => (
-                    <div key={index} className="flex items-start space-x-4 p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
-                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Icon name="Zap" size={20} className="text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">{tech.name}</h3>
-                        <p className="text-gray-600">{tech.description}</p>
-                      </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-blue-500 rounded-2xl flex items-center justify-center">
+                      <Icon name="MapPin" size={24} className="text-black" />
                     </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="relative animate-scale-in">
-                <img 
-                  src="/img/2c2b2d23-dc98-4351-86a4-30a11339c3a0.jpg" 
-                  alt="Современное оборудование" 
-                  className="rounded-3xl shadow-2xl w-full h-96 object-cover"
-                />
-                <div className="absolute -top-6 -left-6 bg-white rounded-2xl p-6 shadow-xl">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                      <Icon name="Award" size={24} className="text-purple-600" />
+                    <div className="text-left">
+                      <div className="font-fredoka text-xl text-white font-bold">Адрес</div>
+                      <div className="font-space text-gray-300">Космопорт Москва, д. 2050</div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-gray-800">Премиум качество</div>
-                      <div className="text-gray-600 text-sm">Европейские стандарты</div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4">
+                    <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-orange-500 rounded-2xl flex items-center justify-center">
+                      <Icon name="Phone" size={24} className="text-black" />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-fredoka text-xl text-white font-bold">Телефон</div>
+                      <div className="font-space text-gray-300">+7 (495) FUTURE-1</div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Reviews Section */}
-      {activeSection === 'reviews' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-gray-800 mb-6">Отзывы Пациентов</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Что говорят о нас наши пациенты
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {reviews.map((review, index) => (
-                <Card key={index} className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg bg-white/80 backdrop-blur-sm animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="font-semibold text-gray-800">{review.name}</div>
-                      <div className="flex space-x-1">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <Icon key={i} name="Star" size={16} className="text-yellow-400 fill-current" />
-                        ))}
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 italic">"{review.text}"</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            <div className="text-center mt-12">
-              <div className="inline-flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-lg">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-500">4.9</div>
-                  <div className="text-gray-600 text-sm">Средняя оценка</div>
-                </div>
-                <Separator orientation="vertical" className="h-12" />
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">847</div>
-                  <div className="text-gray-600 text-sm">Отзывов</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Contacts Section */}
-      {activeSection === 'contacts' && (
-        <section className="pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-gray-800 mb-6">Контакты</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Свяжитесь с нами любым удобным способом
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-2 gap-12">
-              <div className="space-y-8 animate-fade-in">
-                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                  <CardContent className="p-8">
-                    <div className="space-y-6">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                          <Icon name="MapPin" size={20} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-gray-800">Адрес</div>
-                          <div className="text-gray-600">г. Москва, ул. Лечебная, д. 15</div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                          <Icon name="Phone" size={20} className="text-green-600" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-gray-800">Телефон</div>
-                          <div className="text-gray-600">+7 (495) 123-45-67</div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                          <Icon name="Mail" size={20} className="text-purple-600" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-gray-800">Email</div>
-                          <div className="text-gray-600">info@smile-clinic.ru</div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                          <Icon name="Clock" size={20} className="text-orange-600" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-gray-800">Режим работы</div>
-                          <div className="text-gray-600">Пн-Пт: 9:00-21:00, Сб-Вс: 10:00-18:00</div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-600 to-green-600 text-white">
-                  <CardContent className="p-8 text-center">
-                    <h3 className="text-2xl font-bold mb-4">Запишитесь на консультацию</h3>
-                    <p className="mb-6 opacity-90">Первичная консультация бесплатно до конца месяца</p>
-                    <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8">
-                      <Icon name="Calendar" size={20} className="mr-2" />
-                      Записаться онлайн
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
+              </Card>
               
-              <div className="animate-scale-in">
-                <Card className="border-0 shadow-lg bg-gray-100 h-96">
-                  <CardContent className="p-0 h-full relative rounded-lg overflow-hidden">
-                    <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                      <div className="text-center text-gray-600">
-                        <Icon name="MapPin" size={48} className="mx-auto mb-4" />
-                        <div className="text-lg font-semibold">Интерактивная карта</div>
-                        <div className="text-sm">г. Москва, ул. Лечебная, д. 15</div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 backdrop-blur-sm border-2 border-pink-500/50 rounded-3xl p-8 transform -rotate-2 hover:rotate-1 transition-all duration-300">
+                <div className="text-center">
+                  <h3 className="font-fredoka text-3xl font-bold text-white mb-6">Запись в будущее</h3>
+                  <p className="font-space text-gray-300 mb-8">Первая консультация БЕСПЛАТНО</p>
+                  <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-blue-500 hover:to-green-500 text-black font-bold text-xl px-12 py-6 rounded-full transform hover:scale-110 transition-all duration-300 shadow-2xl">
+                    <Icon name="Rocket" size={24} className="mr-3" />
+                    ПОЕХАЛИ!
+                  </Button>
+                </div>
+              </Card>
             </div>
           </div>
-        </section>
-      )}
-
-      {/* Wave Footer */}
-      <footer className="relative">
-        <div className="absolute inset-x-0 top-0">
-          <svg viewBox="0 0 1440 320" className="w-full h-32">
-            <path 
-              fill="#1e40af" 
-              fillOpacity="0.1" 
-              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,117.3C672,107,768,117,864,128C960,139,1056,149,1152,149.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            ></path>
-          </svg>
         </div>
-        <div className="relative bg-gradient-to-r from-blue-600 to-green-600 text-white py-12">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <div className="mb-8">
-              <h3 className="text-3xl font-bold mb-2">Smile Clinic</h3>
-              <p className="opacity-90">Здоровые зубы - красивая улыбка</p>
-            </div>
+      </section>
+
+      {/* Footer with Gradient Border */}
+      <footer className="relative">
+        <div className="h-1 bg-gradient-to-r from-pink-500 via-blue-500 via-green-500 to-orange-500"></div>
+        <div className="bg-gradient-to-r from-purple-500 to-black py-16">
+          <div className="container mx-auto px-6 text-center">
+            <h3 className="font-fredoka text-4xl font-bold mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500">
+                DENTAL FUTURE
+              </span>
+            </h3>
+            <p className="font-caveat text-2xl text-gray-300">Стоматология космической эры</p>
             
-            <div className="flex justify-center space-x-6 mb-8">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-                <Icon name="Phone" size={20} className="mr-2" />
-                +7 (495) 123-45-67
-              </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-                <Icon name="Mail" size={20} className="mr-2" />
-                info@smile-clinic.ru
-              </Button>
-            </div>
-            
-            <div className="text-sm opacity-75">
-              © 2024 Smile Clinic. Все права защищены.
+            <div className="mt-8 text-sm text-gray-500 font-space">
+              © 2024 Dental Future. Все права защищены в этой и параллельных вселенных.
             </div>
           </div>
         </div>
